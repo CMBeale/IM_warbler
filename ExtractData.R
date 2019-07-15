@@ -1,6 +1,6 @@
 library(plyr)
 library(dplyr)
-library(rBBS)
+library(rBBS)   ## CMB Change Note not available on CRAN - I found it https://github.com/oharar/rBBS
 library(USAboundaries)
 library(sf)
 library(sp)
@@ -85,7 +85,7 @@ if(!file.exists("Data/BBS.csv")) {
   BBS_Wren <- as.data.frame(BBS_Wren)
   write.csv(BBS_Wren, file="Data/BBS.csv")
 } else {
-  BBS <- read.csv(file="Data/BBS.csv")
+  BBS_Wren <- read.csv(file="Data/BBS.csv")  ### CMB change
 }
 
 BBS_sp <- SpatialPointsDataFrame(BBS_Wren[,c("X", "Y")],
@@ -134,7 +134,7 @@ canopy <- as.data.frame(NLCD_canopy, xy = T, na.rm = T)
 
 covariates <- full_join(elevation, canopy, by = c("x", "y"))
 covariates <- covariates %>%
-  rename(elevation = layer, canopy = PA_lc_NLCD_2011_canopy, X = x, Y = y)
+  rename(elevation = layer.x, canopy = layer.y, X = x, Y = y)  #### CMB change
 covariates <- SpatialPointsDataFrame(covariates[,c("X", "Y")], 
                                      data = covariates[,c("elevation", "canopy")], proj4string = crs(proj))
 covariates@data <-data.frame(apply(covariates@data, 2 , scale))  # scale the covariates
